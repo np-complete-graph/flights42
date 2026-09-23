@@ -14,8 +14,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormField, required } from '@angular/forms/signals';
-import { SignalFormControl } from '@angular/forms/signals/compat';
-import { compatForm } from '@angular/forms/signals/compat';
+import { compatForm, SignalFormControl } from '@angular/forms/signals/compat';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -40,6 +39,7 @@ export class CheckinPage {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly dialog = inject(MatDialog);
   private readonly formBuilder = inject(FormBuilder);
+  //TODO: Inject LuggageClient in here
 
   private readonly upgradeService = injectAsync(() =>
     import('./upgrade-service').then((m) => m.UpgradeService),

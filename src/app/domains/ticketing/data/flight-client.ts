@@ -1,12 +1,12 @@
-import { HttpClient, httpResource } from '@angular/common/http';
-import { inject, resource, Service, Signal } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
 import {
   httpMutation,
   HttpMutationOptions,
   rxMutation,
   RxMutationOptions,
 } from '@angular-architects/ngrx-toolkit';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject, resource, Service, Signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { firstValueFrom, map, Observable } from 'rxjs';
 
 import { ConfigService } from '../../shared/util-common/config-service';
@@ -114,7 +114,6 @@ export class FlightClient {
           id: id(),
         },
       }),
-      // TODO: Extend Service
       {
         defaultValue: initialFlight,
         parse: (raw) => {

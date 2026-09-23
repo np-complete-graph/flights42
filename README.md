@@ -2,21 +2,21 @@
 
 ## Starting the Client
 
+Installing Dependencies:
+
+```bash
+npm i
+```
+
+Running the frontend:
+
 ```bash
 ng serve -o
 ```
 
-## Trying out the AI Assistant
+## Hands-On Tasks
 
-1. Set the env variable `GOOGLE_API_KEY` or `OPENAI_API_KEY` to the API key you've got from your AI provider.
-2. Start `server-google.ts` or `server-openai.ts`:
-
-   ```bash
-   npx tsx server-google.ts
-
-   # or
-   npx tsx server-openai.ts
-   ```
-
-3. Define model to use in your `config.ts`
-4. Start Angular solution: `ng serve -o`
+1. Run `npx sheriff list src/main.ts` in the root folder to list all the found modules.
+2. Open `CheckinPage` and inject the `LuggageClient` into the component.
+   What happens and why?
+3. Running `npx sheriff verify src/main.ts` you can run the checks and get a list of all the violations. What is the problem and what needs to be changed inside the `sheriff.config.ts` file, such that the check passes?
