@@ -3,16 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   signal,
 } from '@angular/core';
-import { debounce, form, FormField } from '@angular/forms/signals';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 
 // import { LuggageClient } from '../../../luggage/data/luggage-client';
-import { appSettings } from '../../../shared/util-common/app-settings';
 import { Flight } from '../../data/flight';
 import { FlightClient } from '../../data/flight-client';
 import { FlightCard } from '../../ui/flight-card/flight-card';
@@ -24,71 +21,25 @@ import { FlightCard } from '../../ui/flight-card/flight-card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightSearch {
-  private snackBar = inject(MatSnackBar);
   private flightClient = inject(FlightClient);
 
-  protected readonly filter = signal({
-    from: 'Graz',
-    to: 'Hamburg',
-  });
+  protected from = signal('Graz');
+  protected to = signal('Hamburg');
 
-  protected readonly filterForm = form(this.filter, (path) => {
-    debounce(path.from, appSettings.debounceTimeMs);
-    debounce(path.to, appSettings.debounceTimeMs);
-  });
+  //TODO: Implement a Resource that fetches the flights from/to using flightClient
+
   protected readonly delayInMin = signal(0);
 
-  protected readonly flightsResource = this.flightClient.findResource(
-    this.filterForm.from().value,
-    this.filterForm.to().value,
-  );
+  //TODO: Create a computed signal that returns the label for the current search filter from -> to
+  protected readonly flightRoute = computed(() => '??');
 
-  protected readonly flights = this.flightsResource.value;
-  protected readonly isLoading = this.flightsResource.isLoading;
-  protected readonly error = this.flightsResource.error;
-
-  protected readonly basket = signal<Record<number, boolean>>({});
-
-  protected readonly flightRoute = computed(
-    () => this.filter().from + ' - ' + this.filter().to,
-  );
+  //TODO: implement the search functionality using the from/to signals. How can this be done?
+  //Task 1: Can you find a solution that reactively fetches the flights? Can you avoid doing multiple requests when typing, if so how?
+  //Task 2: Can you find a solution to only make the query, when the user presses "search"?
 
   protected readonly flightsWithDelay = computed(() =>
     toFlightsWithDelays(this.flights(), this.delayInMin()),
   );
-
-  constructor() {
-    effect(() => {
-      const error = this.error();
-      if (error || this.filter().to === 'error') {
-        const message = 'Error loading flights: ' + error;
-        this.snackBar.open(message, 'OK');
-      }
-    });
-
-    effect(() => {
-      this.logFilter();
-    });
-  }
-
-  private logFilter() {
-    console.log('filter', this.filter());
-  }
-
-  protected search(): void {
-    this.flightsResource.reload();
-  }
-
-  protected updateBasket(flightId: number, selected: boolean): void {
-    this.basket.update((basket) => ({
-      ...basket,
-      [flightId]: selected,
-    }));
-  }
-
-  protected delay(): void {
-    this.delayInMin.update((delay) => delay + 15);
-  }
 }
 
 function toFlightsWithDelays(flights: Flight[], delay: number): Flight[] {
