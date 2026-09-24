@@ -3,11 +3,11 @@
 <form>
   <div>
     <label for="from">From:</label>
-    <input [formField]="filterForm.from" id="from" />
+    <input [(value)]="filterFrom" id="from" />
   </div>
   <div>
     <label for="to">To:</label>
-    <input [formField]="filterForm.to" id="to" />
+    <input [(value)]="filterTo" id="to" />
   </div>
   <div>
     {{ flightRoute() }}
@@ -16,7 +16,7 @@
     <button
       type="button"
       (click)="search()"
-      [disabled]="!filter().from || !filter().to">
+      [disabled]="!filterFrom() || !filterTo()">
       Search
     </button>
     <button type="button" (click)="delay()">Delay</button>
@@ -30,10 +30,7 @@
   <div class="row">
     @for (flight of flightsWithDelay(); track flight.id) {
       <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <app-flight-card
-          [item]="flight"
-          [selected]="basket()[flight.id]"
-          (selectedChange)="updateBasket(flight.id, $event)">
+        <app-flight-card [item]="flight">
           <button
             [routerLink]="['../flight-edit', flight.id, { showDetails: true }]">
             Edit
@@ -49,7 +46,3 @@
 }
 
 <p>&nbsp;</p>
-
-<div>
-  <pre>{{ basket() | json }}</pre>
-</div>

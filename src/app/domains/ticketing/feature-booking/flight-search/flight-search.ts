@@ -9,7 +9,6 @@ import {
 import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 
-// import { LuggageClient } from '../../../luggage/data/luggage-client';
 import { Flight } from '../../data/flight';
 import { FlightClient } from '../../data/flight-client';
 import { FlightCard } from '../../ui/flight-card/flight-card';
@@ -23,10 +22,15 @@ import { FlightCard } from '../../ui/flight-card/flight-card';
 export class FlightSearch {
   private flightClient = inject(FlightClient);
 
-  protected from = signal('Graz');
-  protected to = signal('Hamburg');
+  protected filterFrom = signal('Graz');
+  protected filterTo = signal('Hamburg');
+
+  protected delay = signal(10);
 
   //TODO: Implement a Resource that fetches the flights from/to using flightClient
+  protected flights = signal([]);
+  protected isLoading = signal(false);
+  protected error = signal(undefined);
 
   protected readonly delayInMin = signal(0);
 
@@ -40,6 +44,10 @@ export class FlightSearch {
   protected readonly flightsWithDelay = computed(() =>
     toFlightsWithDelays(this.flights(), this.delayInMin()),
   );
+
+  protected search() {
+    //TODO: Task 2
+  }
 }
 
 function toFlightsWithDelays(flights: Flight[], delay: number): Flight[] {
