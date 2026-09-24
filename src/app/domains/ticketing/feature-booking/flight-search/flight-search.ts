@@ -6,12 +6,15 @@ import {
   effect,
   inject,
   linkedSignal,
+  signal,
 } from '@angular/core';
 import { form, FormField } from '@angular/forms/signals';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
-
 // import { LuggageClient } from '../../../luggage/data/luggage-client';
+
+import { httpResource } from '@angular/common/http';
+import { FlightClient } from '../../data/flight-client';
 import { FlightCard } from '../../ui/flight-card/flight-card';
 import { FlightStore } from './flight-store';
 
@@ -22,6 +25,7 @@ import { FlightStore } from './flight-store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightSearch {
+  private readonly flightClient = inject(FlightClient);
   private readonly store = inject(FlightStore);
   private readonly snackBar = inject(MatSnackBar);
 
@@ -44,6 +48,28 @@ export class FlightSearch {
     () => this.filter().from + ' - ' + this.filter().to,
   );
 
+  private readonly count = signal(0);
+  private readonly isEven = computed(() => {
+    console.log('OBSERVED');
+    return this.count() % 2;
+  });
+
+  private flightsResource = httpResource(
+    () =>
+      `https://demo.angulararchitects.io/api/flight?from=${this.filter().from}&to=${this.filter().to}`,
+  );
+
+  /*private flightsResource = rxResource({
+    params: this.filter,
+    stream: ({ params }) => this.flightClient.find(params.from, params.to),
+  });*/
+
+  /*private flightsResource = resource({
+    params: this.filter,
+    loader: ({ params }) =>
+      firstValueFrom(this.flightClient.find(params.from, params.to)),
+  });*/
+
   constructor() {
     effect(() => {
       const error = this.error();
@@ -53,16 +79,17 @@ export class FlightSearch {
       }
     });
 
+    this.count.set(1);
+    this.count.set(2);
+    this.count.set(3);
     effect(() => {
-      this.logFilter();
-
-      // this.myService.deleteEntireInternet();
-      //  userId(), loading()
+      //this.isEven();
+      console.log('COUNT:', this.count());
     });
-  }
 
-  private logFilter() {
-    console.log('Filter: ', this.filter());
+    effect(() => {
+      console.log('RESOURCE', this.flightsResource.value());
+    });
   }
 
   protected search(): void {
