@@ -49,6 +49,7 @@ export class FlightSearch {
   );
 
   private readonly count = signal(0);
+  private readonly shouldLog = signal(false);
   private readonly isEven = computed(() => {
     console.log('OBSERVED');
     return this.count() % 2;
@@ -84,7 +85,9 @@ export class FlightSearch {
     this.count.set(3);
     effect(() => {
       //this.isEven();
+      //if (this.shouldLog()) {
       console.log('COUNT:', this.count());
+      //}
     });
 
     effect(() => {
