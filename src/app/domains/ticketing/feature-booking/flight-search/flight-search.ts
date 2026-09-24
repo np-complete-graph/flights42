@@ -6,6 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 
@@ -15,7 +16,7 @@ import { FlightCard } from '../../ui/flight-card/flight-card';
 
 @Component({
   selector: 'app-flight-search',
-  imports: [FormField, FlightCard, JsonPipe, RouterLink],
+  imports: [FormField, FlightCard, JsonPipe, RouterLink, FormsModule],
   templateUrl: './flight-search.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

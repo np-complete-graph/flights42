@@ -3,11 +3,11 @@
 <form>
   <div>
     <label for="from">From:</label>
-    <input [(value)]="filterFrom" id="from" />
+    <input name="from" [(ngModel)]="filterFrom" id="from" />
   </div>
   <div>
     <label for="to">To:</label>
-    <input [(value)]="filterTo" id="to" />
+    <input name="to" [(ngModel)]="filterTo" id="to" />
   </div>
   <div>
     {{ flightRoute() }}
